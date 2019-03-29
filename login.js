@@ -5,8 +5,6 @@ var exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var path = require('path');
 
-//Load and initialize MessageBird SDK
-var messagebird = require('messagebird')(' '); //Input message bird key here
 
 
 var connection = mysql.createConnection({
@@ -53,7 +51,7 @@ app.get('/home', function(request, response) {
     if (request.session.loggedin) {
         response.send('Welcome back, ' + request.session.username + '!');
     } else {
-        response.send('Please login to view this page!');
+        response.send('Please login to views this page!');
     }
     response.end();
 });
@@ -77,4 +75,65 @@ connection.connect(function(err) {
 //     }
 //     console.log('Close the database connection.');
 // });
+
+//Load and initialize MessageBird SDK
+var messagebird = require('messagebird')('0XOme5TvTkZeTa00xuWWiFIlC'); //Input message bird key here
+
+//Set up and configure the Express framework
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
+
+
+//Display page to ask the user their phone number
+app.get('/phone', function(req, res) {
+    res.render('step1');
+});
+
+//Handle phone number submission
+app.post('/step2', function(req, res) {
+   var number = req.body.number;
+
+   //Make request to verify API
+    messagebird.verify.create(number, {
+        template: "Your verification code is %token."
+    },function (err, response) {
+        if(err) {
+            //Request has failed
+            console.log(err);
+            res.render('step1',{
+                error: err.errors[0].description
+            });
+        }
+        else{
+            //Request succeeds
+            console.log(response);
+            res.render('step2',{
+                id: response.id
+            });
+        }
+    })
+});
+
+//Verify whether the token is correct
+
+app.post('/step3', function(req, res) {
+    var id = req.body.id;
+    var token = req.body.token;
+
+    //Make request to verify API
+    messagebird.verify.verify(id, token, function(err, response ) {
+        if(err){
+            //Verification has failed
+            res.render('step2', {
+                error: err.errors[0].description,
+                id: id
+            })
+        } else {
+            //Verification was successful
+            res.render('step3');
+        }
+    })
+});
+
+//
 
