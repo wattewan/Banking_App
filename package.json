@@ -12,7 +12,11 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "express-handlebars": "^3.0.2",
+    "express-session": "^1.15.6",
     "hbs": "^4.0.3",
-    "messagebird": "^2.4.1"
+    "messagebird": "^2.4.1",
+    "mongodb": "^3.2.3",
+    "mysql": "^2.16.0",
+    "path": "^0.12.7"
   }
 }
