@@ -49,7 +49,7 @@ app.post('/auth', function(request, response) {
         db.collection('bank').find({username: username, password: password}).toArray((err, userinfo) => {
                 if (userinfo.length > 0) {
                     //console.log(userinfo);
-                    var authenticated_user = username
+                    var authenticated_user = username;
                     response.redirect(`http://localhost:3000/home/${authenticated_user}`);
                 } else {
                     response.send('Incorrect Username and/or Password!');

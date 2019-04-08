@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "login_mongo.js"
+    "start": "node login_mongo.js"
   },
   "author": "Ewan Watt, Ashvan Wal, Phoung Ho",
   "license": "ISC",
