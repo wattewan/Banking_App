@@ -8,7 +8,9 @@ module.exports.getDb = function() {
 
 
 module.exports.init = function(callback) {
-    MongoClient.connect('mongodb://localhost:27017/test', { useNewUrlParser: true },function (err, client) {
+	const uri = "mongodb+srv://wattewan:8030113Bst@bankingapp-zcncj.mongodb.net/test?retryWrites=true";
+	const client = new MongoClient(uri, { useNewUrlParser: true });
+    client.connect(err => {
         if (err) {
             return console.log('Unable to connect to DB');
         }
@@ -18,4 +20,11 @@ module.exports.init = function(callback) {
     });
 
 };
+
+
+
+
+
+
+
 
