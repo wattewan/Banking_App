@@ -11,6 +11,12 @@ var utils = require('./mongo_init.js');
 
 var app = express();
 
+app.set('view engine', 'hbs');
+app.use(express.static(__dirname + '/views/partials'));
+
+
+
+
 app.listen(3000, () => {
     console.log('Server is up on port 3000');
     utils.init();
@@ -42,7 +48,8 @@ app.post('/auth', function(request, response) {
         db.collection('student').find({username: username, password: password}).toArray((err, userinfo) => {
                 if (userinfo.length > 0) {
                     console.log(userinfo);
-                    response.redirect('http://localhost:3000/home');
+                    var authenticated_user = username
+                    response.redirect('http://localhost:3000/home/${authenticated_user}');
                 } else {
                     response.send('Incorrect Username and/or Password!');
                 }
@@ -57,24 +64,36 @@ app.post('/auth', function(request, response) {
 
 
 
-//
-// app.post('/saveUser', function(request, response) {
-//
-//     var username = request.body.username;
-//     var password = request.body.password;
-//
-//     var db = utils.getDb();
-//     db.collection('student').insertOne({
-//             username: username,
-//             password: password
-//         },(err, result) => {
-//             if(err){
-//                 console.log('Unable to insert user');
-//             }
-//             response.send(JSON.stringify(result.ops, undefined, 2));
-//         }
-//     )
-// });
+
+app.post('/saveUser', function(request, response) {
+
+    var username = request.body.username;
+    var password = request.body.password;
+    var first_name = request.body.first_name;
+    var last_name = request.body.last_name;
+    var checkings = request.body.checkings;
+    var savings = request.body.savings;
+    var email = request.body.email;
+    var phone_num = request.body.phone_num;
+
+    var db = utils.getDb();
+    db.collection('student').insertOne({
+            username: username,
+            password: password,
+            first_name: first_name,
+            last_name: last_name,
+            checkings: checkings,
+            savings: savings,
+            email: email,
+            phone_num: phone_num
+        },(err, result) => {
+            if(err){
+                console.log('Unable to insert user');
+            }
+            response.send(JSON.stringify(result.ops, undefined, 2));
+        }
+    )
+});
 
 
 app.get('/all', function(request, response) {
@@ -108,9 +127,21 @@ app.get(`/user/:name`, function(request, response) {
     )
 });
 
-app.get('/home', function(request, response) {
+app.get('/home/:name', function(request, response) {
 
-    response.sendFile(path.join(__dirname + '/homepage.html'));
+
+    response.render('homepage.hbs', {
+        title: 'Home page',
+        pages: 'one'
+    })
+
+    // response.sendFile(path.join(__dirname + '/homepage.html'));
+
+
+
+
+
+    // var db = utils.getDb();
 
 
 
