@@ -45,11 +45,11 @@ app.post('/auth', function(request, response) {
     var username = request.body.username;
     var password = request.body.password;
     if (username && password) {
-        db.collection('student').find({username: username, password: password}).toArray((err, userinfo) => {
+        db.collection('bank').find({username: username, password: password}).toArray((err, userinfo) => {
                 if (userinfo.length > 0) {
-                    console.log(userinfo);
+                    //console.log(userinfo);
                     var authenticated_user = username
-                    response.redirect('http://localhost:3000/home/${authenticated_user}');
+                    response.redirect(`http://localhost:3000/home/${authenticated_user}`);
                 } else {
                     response.send('Incorrect Username and/or Password!');
                 }
@@ -61,8 +61,6 @@ app.post('/auth', function(request, response) {
         response.end();
     }
 });
-
-
 
 
 app.post('/saveUser', function(request, response) {
@@ -77,7 +75,7 @@ app.post('/saveUser', function(request, response) {
     var phone_num = request.body.phone_num;
 
     var db = utils.getDb();
-    db.collection('student').insertOne({
+    db.collection('bank').insertOne({
             username: username,
             password: password,
             first_name: first_name,
@@ -98,8 +96,8 @@ app.post('/saveUser', function(request, response) {
 
 app.del('/delUser', function (request, response) {
     var db = utils.getDb();
-    db.collection('student').remove({});
-    db.collection('student').find({}).toArray(function(err, result) {
+    db.collection('bank').remove({});
+    db.collection('bank').find({}).toArray(function(err, result) {
         if (err) {
             response.send("Unable to delete student data")
         }
@@ -111,7 +109,7 @@ app.del('/delUser', function (request, response) {
 app.get('/all', function(request, response) {
 
     var db = utils.getDb();
-    db.collection('student').find({}).toArray((err, docs) => {
+    db.collection('bank').find({}).toArray((err, docs) => {
             if(err){
                 console.log('Unable to get user');
             }
@@ -128,12 +126,12 @@ app.get(`/user/:name`, function(request, response) {
 
     var db = utils.getDb();
     var user_name = request.params.name;
-    db.collection('student').find({username: user_name}).toArray((err, docs) => {
+    db.collection('bank').find({username: user_name}).toArray((err, docs) => {
             if(err){
                 console.log('Unable to get user');
             }
             // response.send("Found the following records" + docs);
-            response.send(docs[0]);
+            //response.send(docs[0]);
 
         }
     )
@@ -142,10 +140,27 @@ app.get(`/user/:name`, function(request, response) {
 app.get('/home/:name', function(request, response) {
 
 
-    response.render('homepage.hbs', {
+    var db = utils.getDb();
+    var user_name = request.params.name;
+    db.collection('bank').find({username: user_name}).toArray((err, docs) => {
+        if(err){
+            console.log('Unable to get user');
+        }
+        response.render('homepage.hbs', {
         title: 'Home page',
-        pages: 'one'
+        username: docs[0].username,
+        password: docs[0].password,
+        first_name: docs[0].first_name,
+        last_name: docs[0].last_name,
+        checkings: docs[0].checkings,
+        savings: docs[0].savings,
+        email: docs[0].email,
+        phone_num: docs[0].phone_num
     })
+
+    })
+
+    
 
     // response.sendFile(path.join(__dirname + '/homepage.html'));
 
@@ -181,66 +196,66 @@ app.get('/home/:name', function(request, response) {
 //     console.log('Close the database connection.');
 // });
 
-//Load and initialize MessageBird SDK
-var messagebird = require('messagebird')('0XOme5TvTkZeTa00xuWWiFIlC'); //Input message bird key here
+// //Load and initialize MessageBird SDK
+// var messagebird = require('messagebird')('0XOme5TvTkZeTa00xuWWiFIlC'); //Input message bird key here
 
-//Set up and configure the Express framework
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
-app.set('view engine', 'handlebars');
+// //Set up and configure the Express framework
+// app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+// app.set('view engine', 'handlebars');
 
 
-//Display page to ask the user their phone number
-app.get('/phone', function(req, res) {
-    res.render('step1');
-});
+// //Display page to ask the user their phone number
+// app.get('/phone', function(req, res) {
+//     res.render('step1');
+// });
 
-//Handle phone number submission
-app.post('/step2', function(req, res) {
-    var number = req.body.number;
+// //Handle phone number submission
+// app.post('/step2', function(req, res) {
+//     var number = req.body.number;
 
-    //Make request to verify API
-    messagebird.verify.create(number, {
-        template: "Your verification code is %token."
-    },function (err, response) {
-        if(err) {
-            //Request has failed
-            console.log(err);
-            res.render('step1',{
-                error: err.errors[0].description
-            });
-        }
-        else{
-            //Request succeeds
-            console.log(response);
-            res.render('step2',{
-                id: response.id
-            });
-        }
-    })
-});
+//     //Make request to verify API
+//     messagebird.verify.create(number, {
+//         template: "Your verification code is %token."
+//     },function (err, response) {
+//         if(err) {
+//             //Request has failed
+//             console.log(err);
+//             res.render('step1',{
+//                 error: err.errors[0].description
+//             });
+//         }
+//         else{
+//             //Request succeeds
+//             console.log(response);
+//             res.render('step2',{
+//                 id: response.id
+//             });
+//         }
+//     })
+// });
 
-//Verify whether the token is correct
+// //Verify whether the token is correct
 
-app.post('/step3', function(req, res) {
-    var id = req.body.id;
-    var token = req.body.token;
+// app.post('/step3', function(req, res) {
+//     var id = req.body.id;
+//     var token = req.body.token;
 
-    //Make request to verify API
-    messagebird.verify.verify(id, token, function(err, response ) {
-        if(err){
-            //Verification has failed
-            res.render('step2', {
-                error: err.errors[0].description,
-                id: id
-            })
-        } else {
-            //Verification was successful
-            res.render('step3');
-        }
-    })
-});
+//     //Make request to verify API
+//     messagebird.verify.verify(id, token, function(err, response ) {
+//         if(err){
+//             //Verification has failed
+//             res.render('step2', {
+//                 error: err.errors[0].description,
+//                 id: id
+//             })
+//         } else {
+//             //Verification was successful
+//             res.render('step3');
+//         }
+//     })
+// });
 
-//
+// //
 
 
 
