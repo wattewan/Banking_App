@@ -3,7 +3,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const bodyParser = require('body-parser');
-const port = process.env.PORRT || 3000;
+const port = process.env.PORT || 3000;
 
 var session = require('express-session');
 var exphbs = require('express-handlebars');
