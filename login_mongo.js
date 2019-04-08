@@ -3,6 +3,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const bodyParser = require('body-parser');
+const port = process.env.PORRT || 3000;
 
 var session = require('express-session');
 var exphbs = require('express-handlebars');
@@ -17,8 +18,8 @@ app.use(express.static(__dirname + '/views/partials'));
 
 
 
-app.listen(3000, () => {
-    console.log('Server is up on port 3000');
+app.listen(port, () => {
+    console.log(`Server is up on port ${port}`);
     utils.init();
 });
 
