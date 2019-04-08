@@ -96,6 +96,18 @@ app.post('/saveUser', function(request, response) {
 });
 
 
+app.del('/delUser', function (request, response) {
+    var db = utils.getDb();
+    db.collection('student').remove({});
+    db.collection('student').find({}).toArray(function(err, result) {
+        if (err) {
+            response.send("Unable to delete student data")
+        }
+        response.send(JSON.stringify(result, undefined, 2))
+    });
+
+});
+
 app.get('/all', function(request, response) {
 
     var db = utils.getDb();
