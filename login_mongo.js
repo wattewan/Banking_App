@@ -51,7 +51,7 @@ app.post('/auth', function(request, response) {
                 if (userinfo.length > 0) {
                     //console.log(userinfo);
                     
-                    response.redirect(`/home/${user_name}`);
+                    response.redirect(`/home/${username}`);
 
                 } else {
                     response.send('Incorrect Username and/or Password!');
