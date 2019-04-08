@@ -3,6 +3,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const bodyParser = require('body-parser');
+const port = process.env.PORT || 3000;
 
 var session = require('express-session');
 var exphbs = require('express-handlebars');
@@ -17,8 +18,8 @@ app.use(express.static(__dirname + '/views/partials'));
 
 
 
-app.listen(3000, () => {
-    console.log('Server is up on port 3000');
+app.listen(port, () => {
+    console.log(`Server is up on port ${port}`);
     utils.init();
 });
 
@@ -70,9 +71,10 @@ app.post('/saveUser', function(request, response) {
     var first_name = request.body.first_name;
     var last_name = request.body.last_name;
     var checkings = request.body.checkings;
-    var savings = request.body.savings;
+    var savings = request.body.checkings;
     var email = request.body.email;
     var phone_num = request.body.phone_num;
+    var total_balance = request.body.checkings + request.body.checkings;
 
     var db = utils.getDb();
     db.collection('bank').insertOne({
