@@ -228,6 +228,7 @@ app.get('/home/:name', function(request, response) {
 });
 
 
+<<<<<<< HEAD
 
     app.get('/home/contact/:name', function(request, response) {
 
@@ -253,6 +254,62 @@ app.get('/home/:name', function(request, response) {
 
         })
     });
+=======
+app.post('/home/currency/calculate/:name', function(request, response) {
+    // var id = request.body.id;
+    // var name = request.body.name;
+    // var email = request.body.email;
+
+    // response.send("OK")
+
+    var db = utils.getDb();
+    var withdraw = request.body.withdraw;
+    var deposit = request.body.deposit;
+    var user_name = request.params.name;
+
+    db.collection('bank').find({username: user_name}).toArray((err, docs) => {
+        if(err){
+            console.log('Unable to get user');
+        }
+        response.send(docs[0].username)
+
+        //response.render('currency.hbs', {
+        //     title: 'Home page',
+        //     username: docs[0].username,
+        //     password: docs[0].password,
+        //     first_name: docs[0].first_name,
+        //     last_name: docs[0].last_name,
+        //     checkings: docs[0].checkings,
+        //     savings: docs[0].savings,
+        //     email: docs[0].email,
+        //     phone_num: docs[0].phone_num,
+        //     pages: ['account_management', 'currency']
+        // })
+
+    })
+
+    // if (username && password) {
+    //     db.collection('bank').find({username: username, password: password}).toArray((err, userinfo) => {
+    //
+    //             if (userinfo.length > 0) {
+    //                 //console.log(userinfo);
+    //
+    //                 response.redirect(`/home/${username}`);
+    //
+    //             } else {
+    //                 response.send('Incorrect Username and/or Password!');
+    //             }
+    //             response.end();
+    //         }
+    //     )
+    // } else {
+    //     response.send('Please enter Username and Password!');
+    //     response.end();
+    // }
+});
+
+
+>>>>>>> dfa3e4d200e74c9dd0570a4dbff15edd872bd347
 
 
 // connection.connect(function(err) {
