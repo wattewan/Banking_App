@@ -6,7 +6,6 @@ module.exports.getDb = function() {
     return _db;
 };
 
-
 module.exports.init = function(callback) {
 	const uri = "mongodb+srv://wattewan:8030113Bst@bankingapp-zcncj.mongodb.net/test?retryWrites=true";
 	const client = new MongoClient(uri, { useNewUrlParser: true });

@@ -160,13 +160,10 @@ app.get('/home/:name', function(request, response) {
         savings: docs[0].savings,
         email: docs[0].email,
         phone_num: docs[0].phone_num,
-        pages: ['account_management']
+        pages: ['account']
         })
 
     })
-
-    
-
     // response.sendFile(path.join(__dirname + '/homepage.html'));
 
 
@@ -183,6 +180,55 @@ app.get('/home/:name', function(request, response) {
     //     response.send('Please login to views this page!');
     // }
     // response.end();
+});
+    app.get('/home/account/:name', function(request, response) {
+    var db = utils.getDb();
+    var user_name = request.params.name;
+    db.collection('bank').find({username: user_name}).toArray((err, docs) => {
+        if(err){
+            console.log('Unable to get user');
+        }
+        response.render('account_management.hbs', {
+        title: 'Home page',
+        username: docs[0].username,
+        password: docs[0].password,
+        first_name: docs[0].first_name,
+        last_name: docs[0].last_name,
+        checkings: docs[0].checkings,
+        savings: docs[0].savings,
+        email: docs[0].email,
+        phone_num: docs[0].phone_num,
+        pages: ['account_management']
+        })
+
+    })
+});
+
+
+
+    app.get('/account/:name', function(request, response) {
+
+
+    var db = utils.getDb();
+    var user_name = request.params.name;
+    db.collection('bank').find({username: user_name}).toArray((err, docs) => {
+        if(err){
+            console.log('Unable to get user');
+        }
+        response.render('account_management.hbs', {
+        title: 'Home page',
+        username: docs[0].username,
+        password: docs[0].password,
+        first_name: docs[0].first_name,
+        last_name: docs[0].last_name,
+        checkings: docs[0].checkings,
+        savings: docs[0].savings,
+        email: docs[0].email,
+        phone_num: docs[0].phone_num,
+        pages: ['account_management']
+        })
+
+    })
 });
 
 // connection.connect(function(err) {
