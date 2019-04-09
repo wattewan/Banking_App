@@ -143,7 +143,6 @@ app.get(`/user/:name`, function(request, response) {
 
 app.get('/home/:name', function(request, response) {
 
-
     var db = utils.getDb();
     var user_name = request.params.name;
     db.collection('bank').find({username: user_name}).toArray((err, docs) => {
@@ -160,14 +159,11 @@ app.get('/home/:name', function(request, response) {
         savings: docs[0].savings,
         email: docs[0].email,
         phone_num: docs[0].phone_num,
-        pages: ['account']
+        pages: ['account', 'currency']
         })
 
     })
     // response.sendFile(path.join(__dirname + '/homepage.html'));
-
-
-
 
 
     // var db = utils.getDb();
@@ -198,7 +194,7 @@ app.get('/home/:name', function(request, response) {
         savings: docs[0].savings,
         email: docs[0].email,
         phone_num: docs[0].phone_num,
-        pages: ['account_management']
+        pages: ['account_management', 'currency']
         })
 
     })
@@ -206,7 +202,7 @@ app.get('/home/:name', function(request, response) {
 
 
 
-    app.get('/account/:name', function(request, response) {
+    app.get('/home/currency/:name', function(request, response) {
 
 
     var db = utils.getDb();
@@ -215,7 +211,7 @@ app.get('/home/:name', function(request, response) {
         if(err){
             console.log('Unable to get user');
         }
-        response.render('account_management.hbs', {
+        response.render('currency.hbs', {
         title: 'Home page',
         username: docs[0].username,
         password: docs[0].password,
@@ -225,7 +221,7 @@ app.get('/home/:name', function(request, response) {
         savings: docs[0].savings,
         email: docs[0].email,
         phone_num: docs[0].phone_num,
-        pages: ['account_management']
+        pages: ['account_management', 'currency']
         })
 
     })
