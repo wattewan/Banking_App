@@ -160,7 +160,8 @@ app.get('/home/:name', function(request, response) {
         savings: docs[0].savings,
         email: docs[0].email,
         phone_num: docs[0].phone_num
-    })
+        pages: ['account_management']
+        })
 
     })
 
