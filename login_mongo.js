@@ -159,7 +159,7 @@ app.get('/home/:name', function(request, response) {
         savings: docs[0].savings,
         email: docs[0].email,
         phone_num: docs[0].phone_num,
-        pages: ['account', 'currency']
+        pages: ['account', 'currency', 'contact']
         })
 
     })
@@ -226,6 +226,34 @@ app.get('/home/:name', function(request, response) {
 
     })
 });
+
+
+
+    app.get('/home/contact/:name', function(request, response) {
+
+
+        var db = utils.getDb();
+        var user_name = request.params.name;
+        db.collection('bank').find({username: user_name}).toArray((err, docs) => {
+            if(err){
+                console.log('Unable to get user');
+            }
+            response.render('contact.hbs', {
+                title: 'Home page',
+                username: docs[0].username,
+                password: docs[0].password,
+                first_name: docs[0].first_name,
+                last_name: docs[0].last_name,
+                checkings: docs[0].checkings,
+                savings: docs[0].savings,
+                email: docs[0].email,
+                phone_num: docs[0].phone_num,
+                pages: ['account_management', 'currency', 'contact']
+            })
+
+        })
+    });
+
 
 // connection.connect(function(err) {
 //     if (err) {
