@@ -271,8 +271,14 @@ app.post('/home/currency/calculate/:name', function(request, response) {
         if(err){
             console.log('Unable to get user');
         }
-        response.send(docs[0].username)
 
+        if (deposit.length === '') {
+            response.send(docs[0].checkings - withdraw);
+        }
+
+        // response.send(docs[0].checkings + deposit);
+
+        // response.send(new_balance);
         //response.render('currency.hbs', {
         //     title: 'Home page',
         //     username: docs[0].username,
