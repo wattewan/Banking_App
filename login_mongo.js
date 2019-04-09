@@ -177,84 +177,85 @@ app.get('/home/:name', function(request, response) {
     // }
     // response.end();
 });
-    app.get('/home/account/:name', function(request, response) {
+
+app.get('/home/account/:name', function(request, response) {
+var db = utils.getDb();
+var user_name = request.params.name;
+db.collection('bank').find({username: user_name}).toArray((err, docs) => {
+    if(err){
+        console.log('Unable to get user');
+    }
+    response.render('account_management.hbs', {
+    title: 'Home page',
+    username: docs[0].username,
+    password: docs[0].password,
+    first_name: docs[0].first_name,
+    last_name: docs[0].last_name,
+    checkings: docs[0].checkings,
+    savings: docs[0].savings,
+    email: docs[0].email,
+    phone_num: docs[0].phone_num,
+    pages: ['account_management', 'currency']
+    })
+
+})
+});
+
+
+
+app.get('/home/currency/:name', function(request, response) {
+
+
+var db = utils.getDb();
+var user_name = request.params.name;
+db.collection('bank').find({username: user_name}).toArray((err, docs) => {
+    if(err){
+        console.log('Unable to get user');
+    }
+    response.render('currency.hbs', {
+    title: 'Home page',
+    username: docs[0].username,
+    password: docs[0].password,
+    first_name: docs[0].first_name,
+    last_name: docs[0].last_name,
+    checkings: docs[0].checkings,
+    savings: docs[0].savings,
+    email: docs[0].email,
+    phone_num: docs[0].phone_num,
+    pages: ['account_management', 'currency']
+    })
+
+})
+});
+
+
+
+
+app.get('/home/contact/:name', function(request, response) {
+
+
     var db = utils.getDb();
     var user_name = request.params.name;
     db.collection('bank').find({username: user_name}).toArray((err, docs) => {
         if(err){
             console.log('Unable to get user');
         }
-        response.render('account_management.hbs', {
-        title: 'Home page',
-        username: docs[0].username,
-        password: docs[0].password,
-        first_name: docs[0].first_name,
-        last_name: docs[0].last_name,
-        checkings: docs[0].checkings,
-        savings: docs[0].savings,
-        email: docs[0].email,
-        phone_num: docs[0].phone_num,
-        pages: ['account_management', 'currency']
+        response.render('contact.hbs', {
+            title: 'Home page',
+            username: docs[0].username,
+            password: docs[0].password,
+            first_name: docs[0].first_name,
+            last_name: docs[0].last_name,
+            checkings: docs[0].checkings,
+            savings: docs[0].savings,
+            email: docs[0].email,
+            phone_num: docs[0].phone_num,
+            pages: ['account_management', 'currency', 'contact']
         })
 
     })
 });
 
-
-
-    app.get('/home/currency/:name', function(request, response) {
-
-
-    var db = utils.getDb();
-    var user_name = request.params.name;
-    db.collection('bank').find({username: user_name}).toArray((err, docs) => {
-        if(err){
-            console.log('Unable to get user');
-        }
-        response.render('currency.hbs', {
-        title: 'Home page',
-        username: docs[0].username,
-        password: docs[0].password,
-        first_name: docs[0].first_name,
-        last_name: docs[0].last_name,
-        checkings: docs[0].checkings,
-        savings: docs[0].savings,
-        email: docs[0].email,
-        phone_num: docs[0].phone_num,
-        pages: ['account_management', 'currency']
-        })
-
-    })
-});
-
-
-<<<<<<< HEAD
-
-    app.get('/home/contact/:name', function(request, response) {
-
-
-        var db = utils.getDb();
-        var user_name = request.params.name;
-        db.collection('bank').find({username: user_name}).toArray((err, docs) => {
-            if(err){
-                console.log('Unable to get user');
-            }
-            response.render('contact.hbs', {
-                title: 'Home page',
-                username: docs[0].username,
-                password: docs[0].password,
-                first_name: docs[0].first_name,
-                last_name: docs[0].last_name,
-                checkings: docs[0].checkings,
-                savings: docs[0].savings,
-                email: docs[0].email,
-                phone_num: docs[0].phone_num,
-                pages: ['account_management', 'currency', 'contact']
-            })
-
-        })
-    });
-=======
 app.post('/home/currency/calculate/:name', function(request, response) {
     // var id = request.body.id;
     // var name = request.body.name;
@@ -271,6 +272,8 @@ app.post('/home/currency/calculate/:name', function(request, response) {
         if(err){
             console.log('Unable to get user');
         }
+
+
 
         if (deposit.length === '') {
             response.send(docs[0].checkings - withdraw);
@@ -314,8 +317,6 @@ app.post('/home/currency/calculate/:name', function(request, response) {
     // }
 });
 
-
->>>>>>> dfa3e4d200e74c9dd0570a4dbff15edd872bd347
 
 
 // connection.connect(function(err) {
