@@ -13,6 +13,7 @@ var utils = require('./mongo_init.js');
 var app = express();
 
 app.set('view engine', 'hbs');
+app.use(express.static(__dirname + '/views/partials'));
 
 
 
