@@ -3,7 +3,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const bodyParser = require('body-parser');
-const hbs = require('hbs')
 const port = process.env.PORT || 3000;
 
 var session = require('express-session');
@@ -14,9 +13,6 @@ var utils = require('./mongo_init.js');
 var app = express();
 
 app.set('view engine', 'hbs');
-
-hbs.registerPartials(__dirname + '/views/partials');
-
 
 
 
