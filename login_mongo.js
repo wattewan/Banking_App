@@ -254,7 +254,8 @@ app.get('/home/:name', function(request, response) {
 
         })
     });
-=======
+
+
 app.post('/home/currency/calculate/:name', function(request, response) {
     // var id = request.body.id;
     // var name = request.body.name;
